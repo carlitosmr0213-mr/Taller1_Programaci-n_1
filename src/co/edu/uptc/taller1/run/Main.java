@@ -1,7 +1,7 @@
 package co.edu.uptc.taller1.run;
  
 import java.util.Scanner;
-import co.edu.uptc.taller1.model.Management;
+import co.edu.uptc.taller1.logic.Management;
  
 public class Main {
     public static void main(String[] args) {

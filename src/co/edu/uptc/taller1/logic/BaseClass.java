@@ -1,4 +1,4 @@
-package co.edu.uptc.taller1.model;
+package co.edu.uptc.taller1.logic;
 
 public class BaseClass {
     protected String id;

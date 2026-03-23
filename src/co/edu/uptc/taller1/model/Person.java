@@ -1,6 +1,7 @@
 package co.edu.uptc.taller1.model;
 
 import co.edu.uptc.taller1.enums.IdentificationTypeEnum;
+import co.edu.uptc.taller1.logic.BaseClass;
 
 public class Person extends BaseClass {
 	 

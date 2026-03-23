@@ -1,5 +1,7 @@
 package co.edu.uptc.taller1.model;
 
+import co.edu.uptc.taller1.logic.BaseClass;
+
 public class Company extends BaseClass {
 	 
     private String companyName;

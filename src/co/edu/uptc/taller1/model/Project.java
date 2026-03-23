@@ -2,6 +2,8 @@ package co.edu.uptc.taller1.model;
 
 import java.util.Date;
 
+import co.edu.uptc.taller1.logic.BaseClass;
+
 public class Project extends BaseClass {
 	 
     private String projectName;

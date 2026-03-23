@@ -1,4 +1,4 @@
-package co.edu.uptc.taller1.model;
+package co.edu.uptc.taller1.logic;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -6,15 +6,18 @@ import java.util.Date;
 import java.util.Scanner;
  
 import co.edu.uptc.taller1.enums.IdentificationTypeEnum;
+import co.edu.uptc.taller1.model.Company;
+import co.edu.uptc.taller1.model.Contract;
+import co.edu.uptc.taller1.model.Employee;
+import co.edu.uptc.taller1.model.Project;
  
-/**
- * Parametrizada con <T extends BaseClass> para que los métodos genéricos
+/**métodos genéricos
  * (insertar, buscar, actualizar, eliminar) funcionen con cualquier entidad.
  */
 public class Management<T extends BaseClass> {
  
     private final ArrayList<T> listObject = new ArrayList<>();
-    private static Management<Employee> employees;
+    private static Management<Employee> employees;	
     private static Management<Company>  companies;
     private static Management<Project>  projects;
     private static Management<Contract> contracts;
@@ -39,7 +42,7 @@ public class Management<T extends BaseClass> {
                 .orElse(null);
     }
  
-    /** Retorna el índice del elemento con ese ID, o -1 si no existe. */
+    /** Retorna el índice del elemento con ese ID o -1 si no existe. */
     public int findIndexObjectById(String id) {
         for (int i = 0; i < listObject.size(); i++) {
             if (listObject.get(i).getId().equals(id)) return i;
@@ -70,10 +73,7 @@ public class Management<T extends BaseClass> {
         return listObject;
     }
  
-    // ══════════════════════════════════════════════════════════════════════════
-    // PUNTO DE ENTRADA — el Main solo llama este método estático
-    // ══════════════════════════════════════════════════════════════════════════
- 
+    /**Metodo que se llama en el main*/
     public static void ejecutar(Scanner scanner) {
         sc        = scanner;
         employees = new Management<>();
