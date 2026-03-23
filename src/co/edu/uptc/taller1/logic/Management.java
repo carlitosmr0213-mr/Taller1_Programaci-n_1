@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
- 
+
+import co.edu.uptc.taller1.enums.ContractTypeEnum;
 import co.edu.uptc.taller1.enums.IdentificationTypeEnum;
 import co.edu.uptc.taller1.model.Company;
 import co.edu.uptc.taller1.model.Contract;
@@ -13,10 +14,11 @@ import co.edu.uptc.taller1.model.Project;
  
 /**métodos genéricos
  * (insertar, buscar, actualizar, eliminar) funcionen con cualquier entidad.
+ * en este se aplican los CRUDS para cada entidad
  */
 public class Management<T extends BaseClass> {
  
-    private final ArrayList<T> listObject = new ArrayList<>();
+    private ArrayList<T> listObject = new ArrayList<>();
     private static Management<Employee> employees;	
     private static Management<Company>  companies;
     private static Management<Project>  projects;
@@ -26,7 +28,7 @@ public class Management<T extends BaseClass> {
  
     public Management() {}
  
-    /** Inserta solo si el ID no existe ya en la lista. */
+    /** Inserta solo si el ID no existe ya en la lista */
     public boolean insertObject(T object) {
         if (findObjectById(object.getId()) == null) {
             listObject.add(object);
@@ -74,7 +76,7 @@ public class Management<T extends BaseClass> {
     }
  
     /**Metodo que se llama en el main*/
-    public static void ejecutar(Scanner scanner) {
+    public static void execute(Scanner scanner) {
         sc        = scanner;
         employees = new Management<>();
         companies = new Management<>();
@@ -132,19 +134,19 @@ public class Management<T extends BaseClass> {
             op = leerInt();
  
             switch (op) {
-                case 1: crearEmployee();
+                case 1: insertEmployee();
                 		break;
-                case 2: consultarEmployee();
+                case 2: findEmployee();
                 		break;
-                case 3: actualizarEmployee();
+                case 3: updateEmployee();
         				break;
-                case 4: eliminarEmployee();
+                case 4: deleteEmployee();
         				break;
-                case 5: listarEmployees();
+                case 5: listEmployees();
                 		break;
-                case 6: asignarProyecto();
+                case 6: assingProject();
                 		break;
-                case 7: asignarContrato();
+                case 7: assingContract();
                 		break;
                 case 0: break;
                 default: System.out.println("  Opción no válida.");
@@ -152,7 +154,7 @@ public class Management<T extends BaseClass> {
         } while (op != 0);
     }
  
-    private static void crearEmployee() {
+    private static void insertEmployee() {
         System.out.println("\n  >> CREAR EMPLEADO");
         System.out.print("  Nombre completo     : ");
         String nombre  = sc.nextLine();
@@ -172,7 +174,7 @@ public class Management<T extends BaseClass> {
             case 3: idType = IdentificationTypeEnum.CE;
             		break;
             default: idType = IdentificationTypeEnum.CC;
-        };
+        }
         System.out.print("  ID Empleado         : ");
         String empID  = sc.nextLine();
         System.out.print("  Salario             : ");
@@ -186,7 +188,7 @@ public class Management<T extends BaseClass> {
             return;
         }
         System.out.println("Empresas disponibles:");
-        listarCompanies();
+        listCompanies();
         System.out.print("  ID de la empresa    : ");
         String idEmp = sc.nextLine();
         Company empresa = companies.findObjectById(idEmp);
@@ -195,13 +197,14 @@ public class Management<T extends BaseClass> {
         	return; }
  
         Employee e = new Employee(nombre, numDoc, telefono, email,idType, empID, sal, area, new Date(), cargo, empresa);
-        if (employees.insertObject(e))
-            System.out.println("Empleado creado: " + e);
-        else
-            System.out.println("Ya existe un empleado con ese ID.");
+        if (employees.insertObject(e)){
+        	System.out.println("Empleado creado: " + e);
+        }else{
+        	System.out.println("Ya existe un empleado con ese ID.");
+        }
     }
  
-    private static void consultarEmployee() {
+    private static void findEmployee() {
         System.out.println("\n  >> CONSULTAR EMPLEADO");
         System.out.print("  ID del empleado: ");
         String id = sc.nextLine();
@@ -229,7 +232,7 @@ public class Management<T extends BaseClass> {
         System.out.println("============================================");
     }
  
-    private static void actualizarEmployee() {
+    private static void updateEmployee() {
         System.out.println("\nACTUALIZAR EMPLEADO");
         System.out.print("  ID del empleado: ");
         String id = sc.nextLine();
@@ -252,7 +255,7 @@ public class Management<T extends BaseClass> {
         System.out.println("Empleado actualizado: " + e);
     }
  
-    private static void asignarProyecto() {
+    private static void assingProject() {
         System.out.println("\nASIGNAR PROYECTO A EMPLEADO");
         System.out.print("  ID del empleado : ");
         String idEmp = sc.nextLine();
@@ -266,7 +269,7 @@ public class Management<T extends BaseClass> {
         return; 
         }
         System.out.println("Proyectos disponibles:");
-        listarProjects();
+        listProjects();
         System.out.print("  ID del proyecto : ");
         String idPro = sc.nextLine();
         Project p = projects.findObjectById(idPro);
@@ -278,7 +281,7 @@ public class Management<T extends BaseClass> {
         System.out.println("Proyecto '" + p.getProjectName() + "' asignado a " + e.getFullName());
     }
  
-    private static void asignarContrato() {
+    private static void assingContract() {
         System.out.println("\n  >> ASIGNAR CONTRATO A EMPLEADO");
         System.out.print("  ID del empleado  : ");
         String idEmp = sc.nextLine();
@@ -290,7 +293,7 @@ public class Management<T extends BaseClass> {
         return; 
         }
         System.out.println("Contratos disponibles:");
-        listarContracts();
+        listContracts();
         System.out.print("  ID del contrato  : ");
         String idCon = sc.nextLine();
         Contract c = contracts.findObjectById(idCon);
@@ -301,16 +304,17 @@ public class Management<T extends BaseClass> {
         e.setContract(c);
         System.out.println("Contrato '" + c.getId() + "' asignado a " + e.getFullName());
     }
-    private static void eliminarEmployee() {
+    private static void deleteEmployee() {
         System.out.println("\nELIMINAR EMPLEADO");
         System.out.print("  ID del empleado: "); String id = sc.nextLine();
-        if (employees.deleteObject(id))
-            System.out.println("Empleado eliminado.");
-        else
-            System.out.println("Empleado no encontrado.");
+        if (employees.deleteObject(id)){
+        	System.out.println("Empleado eliminado.");
+        }else{
+        	System.out.println("Empleado no encontrado.");
+        }
     }
  
-    private static void listarEmployees() {
+    private static void listEmployees() {
         System.out.println("\n  Empleados registrados:");
         if (employees.getListObject().isEmpty()) {
             System.out.println(" (lista vacía)");
@@ -338,15 +342,15 @@ public class Management<T extends BaseClass> {
             op = leerInt();
  
             switch (op) {
-                case 1: crearCompany();
+                case 1: insertCompany();
                 		break;
-                case 2: consultarCompany();
+                case 2: findCompany();
                 		break;
-                case 3: actualizarCompany();
+                case 3: updateCompany();
                 		break;
-                case 4: eliminarCompany();;
+                case 4: deleteCompany();;
                 		break;
-                case 5: listarCompanies();
+                case 5: listCompanies();
                 		break;
                 case 0: break;
                 default:System.out.println("Opción no válida.");
@@ -354,7 +358,7 @@ public class Management<T extends BaseClass> {
         } while (op != 0);
     }
  
-    private static void crearCompany() {
+    private static void insertCompany() {
         System.out.println("\n  >> CREAR EMPRESA");
         System.out.print("  ID empresa  : ");
         String id  = sc.nextLine();
@@ -367,15 +371,17 @@ public class Management<T extends BaseClass> {
         System.out.print("  NIT         : ");
         String nit = sc.nextLine();
         Company c = new Company(id, nom, dir, tel, nit);
-        if (companies.insertObject(c))
-            System.out.println("Empresa creada: " + c);
-        else
-            System.out.println("Ya existe una empresa con ese ID.");
+        if (companies.insertObject(c)){
+        	System.out.println("Empresa creada: " + c);
+        }else{
+        	System.out.println("Ya existe una empresa con ese ID.");
+        }
     }
  
-    private static void consultarCompany() {
+    private static void findCompany() {
         System.out.println("\nCONSULTAR EMPRESA");
-        System.out.print("  ID de la empresa: "); String id = sc.nextLine();
+        System.out.print("  ID de la empresa: ");
+        String id = sc.nextLine();
         Company c = companies.findObjectById(id);
         if (c == null) { System.out.println("Empresa no encontrada."); return; }
  
@@ -388,12 +394,15 @@ public class Management<T extends BaseClass> {
         System.out.println(" ==========================================");
     }
  
-    private static void actualizarCompany() {
+    private static void updateCompany() {
         System.out.println("\nACTUALIZAR EMPRESA");
-        System.out.print("  ID de la empresa: "); String id = sc.nextLine();
+        System.out.print("  ID de la empresa: ");
+        String id = sc.nextLine();
         Company c = companies.findObjectById(id);
-        if (c == null) { System.out.println("Empresa no encontrada."); return; }
- 
+        if (c == null) { 
+        	System.out.println("Empresa no encontrada.");
+        	return; 
+        }
         System.out.println("  (Deje en blanco para no cambiar)");
         System.out.print("  Nuevo nombre    (actual: " + c.getCompanyName() + "): ");
         String nom = sc.nextLine();
@@ -408,16 +417,18 @@ public class Management<T extends BaseClass> {
         System.out.println("Empresa actualizada: " + c);
     }
  
-    private static void eliminarCompany() {
+    private static void deleteCompany() {
         System.out.println("\nELIMINAR EMPRESA");
-        System.out.print("  ID de la empresa: "); String id = sc.nextLine();
-        if (companies.deleteObject(id))
-            System.out.println("Empresa eliminada.");
-        else
-            System.out.println("Empresa no encontrada.");
+        System.out.print("  ID de la empresa: ");
+        String id = sc.nextLine();
+        if (companies.deleteObject(id)){
+        	System.out.println("Empresa eliminada.");
+        }else {
+        	System.out.println("Empresa no encontrada.");
+        }
     }
  
-    private static void listarCompanies() {
+    private static void listCompanies() {
         System.out.println("\n  Empresas registradas:");
         if (companies.getListObject().isEmpty()) {
             System.out.println("  (lista vacía)");
@@ -444,15 +455,15 @@ public class Management<T extends BaseClass> {
             op = leerInt();
  
             switch (op) {
-                case 1: crearProject();
+                case 1: insertProject();
                 		break;
-                case 2: consultarProject();
+                case 2: findProject();
                 		break;
-                case 3: actualizarProject();
+                case 3: updateProject();
                 		break;
-                case 4: eliminarProject();
+                case 4: deleteProject();
                 		break;
-                case 5: listarProjects();
+                case 5: listProjects();
                 		break;
                 case 0: break;
                 default: System.out.println("Opción no válida.");
@@ -460,7 +471,7 @@ public class Management<T extends BaseClass> {
         } while (op != 0);
     }
  
-    private static void crearProject() {
+    private static void insertProject() {
         System.out.println("\nCREAR PROYECTO");
         System.out.print("  ID proyecto : ");
         String id  = sc.nextLine();
@@ -477,20 +488,21 @@ public class Management<T extends BaseClass> {
 		String endDate = sc.nextLine();
 		String fechaArray2 [] = endDate.split("/");
 		Calendar calendar2 = Calendar.getInstance();
-		calendar.set(Integer.parseInt(fechaArray2[2]), 
+		calendar2.set(Integer.parseInt(fechaArray2[2]), 
 				Integer.parseInt(fechaArray2[1]) - 1, 
 				Integer.parseInt(fechaArray2[0]));
         System.out.print("  Presupuesto : ");
         double bud = leerDouble();
  
         Project p = new Project(id, nom, calendar.getTime(), calendar2.getTime(), bud);
-        if (projects.insertObject(p))
-            System.out.println("Proyecto creado: " + p);
-        else
+        if (projects.insertObject(p)){
+        	System.out.println("Proyecto creado: " + p);
+        }else {
             System.out.println("Ya existe un proyecto con ese ID.");
+        }
     }
  
-    private static void consultarProject() {
+    private static void findProject() {
         System.out.println("\nCONSULTAR PROYECTO");
         System.out.print("  ID del proyecto: ");
         String id = sc.nextLine();
@@ -508,7 +520,7 @@ public class Management<T extends BaseClass> {
         System.out.println(" =========================================");
     }
  
-    private static void actualizarProject() {
+    private static void updateProject() {
         System.out.println("\nACTUALIZAR PROYECTO");
         System.out.print("  ID del proyecto: ");
         String id = sc.nextLine();
@@ -528,23 +540,26 @@ public class Management<T extends BaseClass> {
         projects.updateObject(p);
         System.out.println(" Proyecto actualizado: " + p);
     }
-    private static void eliminarProject() {
+    private static void deleteProject() {
         System.out.println("\nELIMINAR PROYECTO");
-        System.out.print("  ID del proyecto: "); String id = sc.nextLine();
-        if (projects.deleteObject(id))
+        System.out.print("  ID del proyecto: ");
+        String id = sc.nextLine();
+        if (projects.deleteObject(id)) {
             System.out.println("Proyecto eliminado.");
-        else
-            System.out.println("Proyecto no encontrado.");
+        }else { 
+        	System.out.println("Proyecto no encontrado.");
+        }
     }
  
-    private static void listarProjects() {
+    private static void listProjects() {
         System.out.println("\n  Proyectos registrados:");
         if (projects.getListObject().isEmpty()) {
             System.out.println("  (lista vacía)");
             return;
         }
-        for (Project p : projects.getListObject())
-            System.out.println(p);
+        for (Project p : projects.getListObject()) {
+        	System.out.println(p);
+        }
     }
     
     /**Menu contrato*/
@@ -565,15 +580,15 @@ public class Management<T extends BaseClass> {
             op = leerInt();
  
             switch (op) {
-                case 1: crearContract();
+                case 1: insertContract();
                 		break;
-                case 2: consultarContract();
+                case 2: findContract();
                 		break;
-                case 3: actualizarContract();
+                case 3: updateContract();
                 		break;
-                case 4: eliminarContract();
+                case 4: deleteContract();
                 		break;
-                case 5: listarContracts();;
+                case 5: listContracts();;
                 		break;
                 case 0: break;
                 default: System.out.println("Opción no válida.");
@@ -581,7 +596,7 @@ public class Management<T extends BaseClass> {
         } while (op != 0);
     }
  
-    private static void crearContract() {
+    private static void insertContract() {
         System.out.println("\nCREAR CONTRATO");
         System.out.print("  ID contrato    : ");
         String id = sc.nextLine();
@@ -596,27 +611,31 @@ public class Management<T extends BaseClass> {
 		String endDate = sc.nextLine();
 		String fechaArray2 [] = endDate.split("/");
 		Calendar calendar2 = Calendar.getInstance();
-		calendar.set(Integer.parseInt(fechaArray2[2]), 
+		calendar2.set(Integer.parseInt(fechaArray2[2]), 
 				Integer.parseInt(fechaArray2[1]) - 1, 
 				Integer.parseInt(fechaArray2[0]));
 		
         System.out.println("  Tipo           : [1] INDEFINIDO  [2] FIJO  [3] PRESTACION_SERVICIOS");
         System.out.print("  Opción         : ");
-        String tipo = switch (leerInt()) {
-            case 2  -> "FIJO";
-            case 3  -> "PRESTACION_SERVICIOS";
-            default -> "INDEFINIDO";
-        };
+        int tipoCon = leerInt();
+        ContractTypeEnum contractType;
+        switch (tipoCon) {
+            case 2: contractType = ContractTypeEnum.FIJO;
+            		break;
+            case 3: contractType = ContractTypeEnum.PRESTACION_SERVICIOS;
+            		break;
+            default: contractType = ContractTypeEnum.INDEFINIDO;
+        }
         System.out.print("  Salario pactado: "); double sal = leerDouble();
  
-        Contract c = new Contract(id, calendar.getTime(), calendar2.getTime(), tipo, sal);
+        Contract c = new Contract(id, calendar.getTime(), calendar2.getTime(), contractType, sal);
         if (contracts.insertObject(c))
             System.out.println("Contrato creado: " + c);
         else
             System.out.println("Ya existe un contrato con ese ID.");
     }
  
-    private static void consultarContract() {
+    private static void findContract() {
         System.out.println("\nCONSULTAR CONTRATO");
         System.out.print("  ID del contrato: "); String id = sc.nextLine();
         Contract c = contracts.findObjectById(id);
@@ -624,27 +643,28 @@ public class Management<T extends BaseClass> {
  
         System.out.println("\n  ==== Datos del contrato =============");
         System.out.println("  ID      : " + c.getId());
-        System.out.println("  Tipo    : " + c.getContractType());
+        System.out.println("  Tipo    : " + c.contractType());
         System.out.println("  Salario : $" + c.getSalary());
         System.out.println("  Inicio  : " + c.getStartDate());
         System.out.println("  ========================================");
     }
  
-    private static void actualizarContract() {
+    private static void updateContract() {
         System.out.println("\nACTUALIZAR CONTRATO");
         System.out.print("  ID del contrato: ");
         String id = sc.nextLine();
         Contract c = contracts.findObjectById(id);
-        if (c == null) { System.out.println("Contrato no encontrado.");
-        return; 
+        if (c == null) { 
+        	System.out.println("Contrato no encontrado.");
+        	return; 
         }
-        System.out.println("  Tipo actual: " + c.getContractType());
+        System.out.println("  Tipo actual: " + c.contractType());
         System.out.println("  Nuevo tipo : [1] INDEFINIDO  [2] FIJO  [3] PRESTACION_SERVICIOS  [0] No cambiar");
         System.out.print("  Opción     : ");
         int tipoOp = leerInt();
-        if (tipoOp == 1) c.setContractType("INDEFINIDO");
-        if (tipoOp == 2) c.setContractType("FIJO");
-        if (tipoOp == 3) c.setContractType("PRESTACION_SERVICIOS");
+        if (tipoOp == 1) c.setContractType(ContractTypeEnum.INDEFINIDO);
+        if (tipoOp == 2) c.setContractType(ContractTypeEnum.FIJO);
+        if (tipoOp == 3) c.setContractType(ContractTypeEnum.PRESTACION_SERVICIOS);
  
         System.out.print("  Nuevo salario (actual: " + c.getSalary() + ", 0=no cambiar): ");
         double sal = leerDouble();
@@ -653,23 +673,26 @@ public class Management<T extends BaseClass> {
         System.out.println("Contrato actualizado: " + c);
     }
     
-    private static void eliminarContract() {
+    private static void deleteContract() {
         System.out.println("\nELIMINAR CONTRATO");
-        System.out.print("  ID del contrato: "); String id = sc.nextLine();
-        if (contracts.deleteObject(id))
+        System.out.print("  ID del contrato: ");
+        String id = sc.nextLine();
+        if (contracts.deleteObject(id)) {
             System.out.println("Contrato eliminado.");
-        else
+        }else {
             System.out.println("Contrato no encontrado.");
+        }
     }
  
-    private static void listarContracts() {
+    private static void listContracts() {
         System.out.println("\n  Contratos registrados:");
         if (contracts.getListObject().isEmpty()) {
             System.out.println(" (lista vacía)");
             return;
         }
-        for (Contract c : contracts.getListObject())
+        for (Contract c : contracts.getListObject()) {
             System.out.println( c);
+        }
     }
     
     /*Metodos de conversion de NextInt a NextLine*/
@@ -677,13 +700,16 @@ public class Management<T extends BaseClass> {
         try { return Integer.parseInt(sc.nextLine().trim()); }
         catch (NumberFormatException e) { 
         	System.out.println("  Entrada inválida. Se usará 0.");
-        	return 0; }
+        	return 0;
+        }
     }
  
     private static double leerDouble() {
         try { return Double.parseDouble(sc.nextLine().trim()); }
         catch (NumberFormatException e) { 
         	System.out.println("  Entrada inválida. Se usará 0.");
-        	return 0; }
+        	return 0; 
+        }
     }
+    
 }

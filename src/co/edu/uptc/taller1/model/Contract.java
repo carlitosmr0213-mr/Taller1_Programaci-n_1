@@ -2,17 +2,18 @@ package co.edu.uptc.taller1.model;
 
 import java.util.Date;
 
+import co.edu.uptc.taller1.enums.ContractTypeEnum;
 import co.edu.uptc.taller1.logic.BaseClass;
 
 public class Contract extends BaseClass {
 	 
     private Date   startDate;
     private Date   endDate;
-    private String contractType;
+    private ContractTypeEnum contractType;
     private double salary;
  
     public Contract(String id, Date startDate, Date endDate,
-                    String contractType, double salary) {
+    		ContractTypeEnum contractType, double salary) {
         this.id           = id;
         this.startDate    = startDate;
         this.endDate      = endDate;
@@ -36,11 +37,11 @@ public class Contract extends BaseClass {
 		this.endDate = endDate;
 	}
 
-	public String getContractType() {
+	public ContractTypeEnum contractType() {
 		return contractType;
 	}
 
-	public void setContractType(String contractType) {
+	public void setContractType(ContractTypeEnum contractType) {
 		this.contractType = contractType;
 	}
 

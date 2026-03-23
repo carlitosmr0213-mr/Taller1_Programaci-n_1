@@ -53,8 +53,10 @@ public class Project extends BaseClass {
 	}
 
 	@Override
-    public String toString() {
-        return "Project [ID=" + id + ", Nombre=" + projectName +
-               ", Presupuesto=" + budget + "]";
-    }
+	public String toString() {
+		return "Project [projectName=" + projectName + ", startDate=" + startDate + ", endDate=" + endDate + ", budget="
+				+ budget + "]";
+	}
+
+	
 }
