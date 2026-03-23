@@ -7,11 +7,11 @@ public class Person extends BaseClass {
 	 
     protected String                 fullName;
     protected int                    identificationNumber;
-    protected long                    phone;
+    protected int                    phone;
     protected String                 email;
     protected IdentificationTypeEnum identificationType;
  
-    public Person(String fullName, int identificationNumber, long phone,
+    public Person(String fullName, int identificationNumber, int phone,
                   String email, IdentificationTypeEnum identificationType) {
         this.fullName             = fullName;
         this.identificationNumber = identificationNumber;
@@ -36,11 +36,11 @@ public class Person extends BaseClass {
 		this.identificationNumber = identificationNumber;
 	}
 
-	public long getPhone() {
+	public int getPhone() {
 		return phone;
 	}
 
-	public void setPhone(long phone) {
+	public void setPhone(int phone) {
 		this.phone = phone;
 	}
 
